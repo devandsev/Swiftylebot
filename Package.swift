@@ -3,24 +3,17 @@
 import PackageDescription
 
 let package = Package(
-    name: "swiftylebot",
+    name: "Swiftylebot",
     products: [
-        .library(name: "App", targets: ["App"]),
-        .executable(name: "Run", targets: ["Run"])
-    ],
+        .library(
+            name: "Swiftylebot",
+            targets: ["Swiftylebot"]),
+        ],
     dependencies: [
         .package(url: "https://github.com/vapor/vapor.git", .upToNextMajor(from: "2.1.0")),
-        .package(url: "https://github.com/vapor/fluent-provider.git", .upToNextMajor(from: "1.2.0")),
     ],
     targets: [
-        .target(name: "App", dependencies: ["Vapor", "FluentProvider"],
-                exclude: [
-                    "Config",
-                    "Public",
-                    "Resources",
-                ]),
-        .target(name: "Run", dependencies: ["App"]),
-        .testTarget(name: "AppTests", dependencies: ["App", "Testing"])
+        .target(name: "Swiftylebot", dependencies: ["Vapor"]),
+        .target(name: "Development", dependencies: ["Swiftylebot"])
     ]
 )
-
