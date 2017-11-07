@@ -1,7 +1,8 @@
 import Swiftylebot
+import Vapor
 
-let b = try! Bot(token: "test")
-b.onUpdate = {
-    print("update received")
+let b = try! Bot(token: "YOUR_TOKEN")
+b.onUpdate = { json in
+    print(json)
 }
-try! b.startListening()
+try! b.startPolling(with: 2.0)
