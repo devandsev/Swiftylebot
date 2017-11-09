@@ -5,8 +5,8 @@
 //  Created by Andrey Sevrikov on 07/11/2017.
 //
 
-import Vapor
 import Foundation
+import Vapor
 
 struct UpdatesSchema: NodeInitializable {
     

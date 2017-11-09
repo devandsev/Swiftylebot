@@ -10,7 +10,7 @@ developmentTarget.first.build_configuration_list.build_configurations.each do |c
   # binding.pry
   pathToAdd = "${TARGET_BUILD_DIR}/Swiftylebot.framework"
   searchPaths = configuration.build_settings["FRAMEWORK_SEARCH_PATHS"]
-  searchPaths  << pathToAdd unless searchPaths.include?(pathToAdd)
+  searchPaths << pathToAdd unless searchPaths.include?(pathToAdd)
 
   # puts searchPaths
 end
