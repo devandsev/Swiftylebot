@@ -21,6 +21,21 @@ let updateHandler = session.onUpdate() { bot, update in
 //    print(update)
 //}
 
-try! session.startPolling(interval: 2.0)
+session.errorHandler = { error in
+    switch error {
+        
+    case .localError(let description):
+        print("Got local error: \(description)")
+        
+    case .serverError(let apiError):
+        print("Got server error with code \(apiError.code): \(apiError.description)")
+    }
+}
+
+do {
+    try session.startPolling(interval: 30.0)
+} catch let error {
+    print("Got an error: \(error)")
+}
 
 //session.remove(updateHandler: updateHandler)

@@ -13,11 +13,12 @@ public class Session {
     
     // MARK: - Public properties
     
-    public let bot: Bot
+    public var errorHandler: ((TelegramError) -> Void)?
     
     // MARK: - Pivate properties
     
     private let droplet: Droplet
+    private let bot: Bot
     private let token: String
     private var lastOffset: Int?
     private var updateHandlers: [UpdateHandler] = []
@@ -61,13 +62,24 @@ public class Session {
                                                        "timeout": interval]
             params["allowed_updates"] = allowedUdpates.map {$0.rawValue}
             
-            let response = try self.droplet.client.post("https://api.telegram.org/bot\(self.token)/getUpdates", query: params)
-            
-            guard let json = response.json else {
+            guard let response = try? self.droplet.client.post("https://api.telegram.org/bot\(self.token)/getUpdates", query: params) else {
+                handle(error: .localError("Couldn't get response"))
                 continue
             }
             
-            let schema = try UpdatesSchema(node: json)
+            guard let json = response.json else {
+                handle(error: .localError("Couldn't get response json"))
+                continue
+            }
+            
+            guard let schema = try? UpdatesSchema(node: json) else {
+                if let error = try? APIError(node: json) {
+                    handle(error: .serverError(error))
+                } else {
+                    handle(error: .localError("Unknown error"))
+                }
+                continue
+            }
             
             for update in schema.updates {
                 for updateHandler in updateHandlers {
@@ -78,8 +90,6 @@ public class Session {
             if let lastUpdateId = schema.updates.last?.id {
                 self.lastOffset = lastUpdateId + 1
             }
-            
-//            RunLoop.current.run(mode: RunLoopMode.defaultRunLoopMode, before: Date(timeIntervalSinceNow: interval))
         }
     }
     
@@ -93,5 +103,12 @@ public class Session {
         }
         
         try droplet.run()
+    }
+    
+    private func handle(error: TelegramError) {
+        errorHandler?(error)
+        
+        // 10 sec error cooldown
+        RunLoop.current.run(mode: RunLoopMode.defaultRunLoopMode, before: Date(timeIntervalSinceNow: 10))
     }
 }
