@@ -72,23 +72,28 @@ public class Session {
                 continue
             }
             
-            guard let schema = try? UpdatesSchema(node: json) else {
+            do {
+                let schema = try UpdatesSchema(node: json)
+                
+                for update in schema.updates {
+                    for updateHandler in updateHandlers {
+                        updateHandler.process(bot: self.bot, update: update)
+                    }
+                }
+                
+                if let lastUpdateId = schema.updates.last?.id {
+                    self.lastOffset = lastUpdateId + 1
+                }
+            } catch let error as NodeError {
                 if let error = try? APIError(node: json) {
                     handle(error: .serverError(error))
-                } else {
-                    handle(error: .localError("Unknown error"))
                 }
-                continue
-            }
-            
-            for update in schema.updates {
-                for updateHandler in updateHandlers {
-                    updateHandler.process(bot: self.bot, update: update)
+                handle(error: .localError(error.reason))
+            } catch {
+                if let error = try? APIError(node: json) {
+                    handle(error: .serverError(error))
                 }
-            }
-            
-            if let lastUpdateId = schema.updates.last?.id {
-                self.lastOffset = lastUpdateId + 1
+                handle(error: .localError(error.localizedDescription))
             }
         }
     }
