@@ -22,15 +22,6 @@ public struct MessageEntity: NodeInitializable {
         case pre = "pre"
         case textLink = "text_link"
         case textMention = "text_mention"
-        
-        public init(node: Node) throws {
-            guard let string = node.string,
-            let messageEntityType = MessageEntityType(rawValue: string) else {
-                throw NodeError.unableToConvert(input: node, expectation: "String", path: [])
-            }
-            
-            self = messageEntityType
-        }
     }
     
     let type: MessageEntityType

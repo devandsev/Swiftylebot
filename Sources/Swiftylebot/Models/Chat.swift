@@ -15,15 +15,6 @@ public struct Chat: NodeInitializable {
         case group = "group"
         case supergroup = "supergroup"
         case channel = "channel"
-
-        public init(node: Node) throws {
-            guard let string = node.string,
-            let chatType = ChatType(rawValue: string) else {
-                throw NodeError.unableToConvert(input: node, expectation: "String", path: [])
-            }
-            
-            self = chatType
-        }
     }
 
     public let id: Int
