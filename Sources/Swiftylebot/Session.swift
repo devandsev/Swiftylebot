@@ -81,7 +81,7 @@ public class Session {
                     }
                 }
                 
-                if let lastUpdateId = schema.updates.last?.id {
+                if let lastUpdateId = schema.lastUpdateId {
                     self.lastOffset = lastUpdateId + 1
                 }
             } catch let error as NodeError {
