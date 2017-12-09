@@ -20,7 +20,7 @@ public struct VideoNote: NodeInitializable {
         id = try node.get("file_id")
         length = try node.get("length")
         duration = try node.get("duration")
-        thumb = try node.get("thumb")
-        size = try node.get("file_size")
+        thumb = try? node.get("thumb")
+        size = try? node.get("file_size")
     }
 }
