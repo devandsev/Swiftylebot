@@ -31,17 +31,9 @@ public struct ReplyKeyboardMarkup: NodeRepresentable {
         
         try node.set("keyboard", keyboard)
         
-        if let resizeKeyboard = resizeKeyboard {
-            try node.set("resizeKeyboard", resizeKeyboard)
-        }
-        
-        if let oneTimeKeyboard = oneTimeKeyboard {
-            try node.set("oneTimeKeyboard", oneTimeKeyboard)
-        }
-        
-        if let selective = selective {
-            try node.set("selective", selective)
-        }
+        try node.setIfNotNil("resizeKeyboard", resizeKeyboard)
+        try node.setIfNotNil("oneTimeKeyboard", oneTimeKeyboard)
+        try node.setIfNotNil("selective", selective)
         
         return node
     }

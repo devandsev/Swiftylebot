@@ -27,13 +27,8 @@ public struct KeyboardButton: NodeRepresentable {
         var node = Node(context)
         
         try node.set("text", text)
-        
-        if let requestContact = requestContact {
-            try node.set("request_contact", requestContact)
-        }
-        if let requestLocation = requestLocation {
-            try node.set("request_location", requestLocation)
-        }
+        try node.setIfNotNil("request_contact", requestContact)
+        try node.setIfNotNil("request_location", requestLocation)
         
         return node
     }

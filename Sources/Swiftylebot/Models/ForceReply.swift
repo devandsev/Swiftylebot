@@ -1,14 +1,14 @@
 //
-//  ReplyKeyboardRemove.swift
+//  ForceReply.swift
 //  Swiftylebot
 //
-//  Created by Andrey Sevrikov on 09/12/2017.
+//  Created by Andrey Sevrikov on 16/12/2017.
 //
 
 import Foundation
 import Vapor
 
-public struct ReplyKeyboardRemove: NodeRepresentable {
+public struct ForceReply: NodeRepresentable {
     
     public let selective: Bool?
     
@@ -19,7 +19,7 @@ public struct ReplyKeyboardRemove: NodeRepresentable {
     public func makeNode(in context: Context?) throws -> Node {
         var node = Node(context)
         
-        try node.set("remove_keyboard", true)
+        try node.set("force_reply", true)
         
         try node.setIfNotNil("selective", selective)
         
