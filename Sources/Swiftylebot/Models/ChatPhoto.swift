@@ -10,6 +10,11 @@ import Vapor
 
 public struct ChatPhoto: NodeInitializable {
     
+    public let smallFileId: String
+    public let bigFileId: String
+    
     public init(node: Node) throws {
+        smallFileId = try node.get("small_file_id")
+        bigFileId = try node.get("big_file_id")
     }
 }
